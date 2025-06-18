@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOUR'E DAILY FIT AI - Planificador Inteligente</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3f37c9;
+      --accent: #4cc9f0;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f7ff;
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 20px rgba(67, 97, 238, 0.2);
+      margin-bottom: 30px;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-weight: 300;
+      opacity: 0.9;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      padding: 25px;
+      margin-bottom: 30px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+    
+    .card-title i {
+      margin-right: 10px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border 0.3s;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+    
+    select[multiple] {
+      height: auto;
+      min-height: 120px;
+    }
+    
+    button {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+    
+    button i {
+      margin-right: 8px;
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .result-item {
+      margin-bottom: 15px;
+    }
+    
+    .result-item strong {
+      color: var(--primary);
+    }
+    
+    .food-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: rgba(67, 97, 238, 0.05);
+    }
+    
+    .food-item i {
+      margin-right: 15px;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    
+    .food-item .food-details {
+      flex: 1;
+    }
+    
+    .food-item .food-name {
+      font-weight: 500;
+    }
+    
+    .food-item .food-calories {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .image-upload {
+      border: 2px dashed #ddd;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+    }
+    
+    .image-upload:hover {
+      border-color: var(--primary);
+      background: rgba(67, 97, 238, 0.05);
+    }
+    
+    .image-upload i {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    
+    .image-upload p {
+      margin-bottom: 0;
+    }
+    
+    .preview-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .preview-img {
+      max-width: 100%;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto;
+      max-height: 300px;
+      object-fit: cover;
+    }
+    
+    .ai-analysis {
+      background: rgba(76, 201, 240, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 20px;
+    }
+    
+    .ai-analysis h4 {
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .ai-analysis h4 i {
+      margin-right: 10px;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .tab.active {
+      border-bottom: 3px solid var(--primary);
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Nuevos estilos añadidos */
+    .workout-plan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .workout-day {
+      background: rgba(67, 97, 238, 0.05);
+      padding: 15px;
+      border-radius: 10px;
+      border-left: 3px solid var(--primary);
+    }
+    
+    .workout-day h4 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .macro-bar {
+      display: flex;
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    
+    .macro-protein {
+      background: #4cc9f0;
+    }
+    
+    .macro-carbs {
+      background: #4caf50;
+    }
+    
+    .macro-fat {
+      background: #f44336;
+    }
+    
+    .macro-legend {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    
+    .macro-legend span {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    
+    .macro-legend i {
+      margin-right: 5px;
+    }
+    
+    .bmi-indicator {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    
+    .bmi-scale {
+      flex: 1;
+      height: 10px;
+      background: linear-gradient(to right, #4cc9f0, #4caf50, #ff9800, #f44336);
+      border-radius: 5px;
+      position: relative;
+      margin: 0 10px;
+    }
+    
+    .bmi-marker {
+      position: absolute;
+      width: 2px;
+      height: 15px;
+      background: black;
+      top: -2.5px;
+    }
+    
+    .bmi-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #666;
+    }
+    
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      header {
+        padding: 15px 0;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .workout-plan-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .macro-legend {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>YOUR'E DAILY FIT WITH Elb.ai</h1>
+      <p class="subtitle">Planificador inteligente de nutrición y entrenamiento</p>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" data-tab="fitness">Plan Fitness</div>
+      <div class="tab" data-tab="nutrition">Análisis Nutricional</div>
+      <div class="tab" data-tab="food">Alimentos Recomendados</div>
+    </div>
+    
+    <div class="tab-content active" id="fitness-tab">
+      <div class="grid">
+        <div class="card">
+          <h2 class="card-title"><i class="fas fa-user-circle"></i> Tus Datos</h2>
+          <form id="fitnessForm">
+            <div class="form-group">
+              <label for="peso">Peso (kg)</label>
+              <input type="number" id="peso" required min="30" max="200">
+            </div>
+            
+            <div class="form-group">
+              <label for="altura">Altura (cm)</label>
+              <input type="number" id="altura" required min="100" max="250">
+            </div>
+            
+            <div class="form-group">
+              <label for="edad">Edad</label>
+              <input type="number" id="edad" required min="10" max="100">
+            </div>
+            
+            <div class="form-group">
+              <label for="sexo">Sexo</label>
+              <select id="sexo">
+                <option value="hombre">Hombre</option>
+                <option value="mujer">Mujer</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="objetivo">Objetivo</label>
+              <select id="objetivo">
+                <option value="perdida">Pérdida de grasa</option>
+                <option value="mantenimiento">Mantenimiento</option>
+                <option value="ganancia">Ganancia muscular</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="actividad">Nivel de Actividad Diaria</label>
+              <select id="actividad">
+                <option value="sedentario">Sedentario (poco o nada de ejercicio)</option>
+                <option value="ligero">Ligero (ejercicio 1-3 días/semana)</option>
+                <option value="moderado">Moderado (ejercicio 3-5 días/semana)</option>
+                <option value="activo">Activo (ejercicio 6-7 días/semana)</option>
+                <option value="muyActivo">Muy activo (ejercicio intenso diario)</option>
+              </select>
+            </div>
+            
+            <button type="submit" id="calculateBtn">
+              <i class="fas fa-calculator"></i> Calcular Plan
+            </button>
+          </form>
+        </div>
+        
+        <div class="card">
+          <h2 class="card-title"><i class="fas fa-dumbbell"></i> Entrenamiento</h2>
+          <form id="workoutForm">
+            <div class="form-group">
+              <label for="entrenamientos">Selecciona los tipos de entrenamiento</label>
+              <select id="entrenamientos" multiple size="4">
+                <option value="cardio">Cardio (6 METs)</option>
+                <option value="pesas">Pesas (4 METs)</option>
+                <option value="hiit">HIIT (8 METs)</option>
+                <option value="yoga">Yoga (3 METs)</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="duracion">Duración total del entrenamiento (min)</label>
+              <input type="number" id="duracion" min="10" max="180" value="60">
+            </div>
+            
+            <div class="form-group">
+              <label for="nivel">Nivel de condición física</label>
+              <select id="nivel">
+                <option value="principiante">Principiante</option>
+                <option value="intermedio">Intermedio</option>
+                <option value="avanzado">Avanzado</option>
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <div class="card hidden" id="resultado">
+        <h2 class="card-title"><i class="fas fa-chart-line"></i> Resultados</h2>
+        <div id="resultContent"></div>
+      </div>
+    </div>
+    
+    <div class="tab-content" id="nutrition-tab">
+      <div class="card">
+        <h2 class="card-title"><i class="fas fa-camera"></i> Analizador de Alimentos por Imagen</h2>
+        <p>Sube una foto de tu comida y nuestra IA analizará su contenido nutricional.</p>
+        
+        <div class="image-upload" id="uploadContainer">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p>Arrastra y suelta tu imagen aquí o haz clic para seleccionar</p>
+          <input type="file" id="fotoComida" accept="image/*" class="hidden">
+        </div>
+        
+        <div class="preview-container hidden" id="previewContainer">
+          <img id="preview" class="preview-img" />
+          <button id="analyzeBtn" class="btn-outline">
+            <i class="fas fa-search"></i> Analizar Imagen
+          </button>
+        </div>
+        
+        <div class="ai-analysis hidden" id="analysisResult">
+          <h4><i class="fas fa-robot"></i> Análisis de IA</h4>
+          <div id="analisisComida"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="tab-content" id="food-tab">
+      <div class="card">
+        <h2 class="card-title"><i class="fas fa-utensils"></i> Alimentos Recomendados</h2>
+        <p>Basado en tus objetivos y datos personales, te recomendamos estos alimentos:</p>
+        
+        <div class="food-item">
+          <i class="fas fa-drumstick-bite"></i>
+          <div class="food-details">
+            <div class="food-name">Pollo a la plancha</div>
+            <div class="food-calories">165 kcal / 31g proteína por 100g</div>
+          </div>
+        </div>
+        
+        <div class="food-item">
+          <i class="fas fa-fish"></i>
+          <div class="food-details">
+            <div class="food-name">Salmón</div>
+            <div class="food-calories">208 kcal / 20g proteína por 100g</div>
+          </div>
+        </div>
+        
+        <div class="food-item">
+          <i class="fas fa-egg"></i>
+          <div class="food-details">
+            <div class="food-name">Huevos</div>
+            <div class="food-calories">155 kcal / 13g proteína por 100g</div>
+          </div>
+        </div>
+        
+        <div class="food-item">
+          <i class="fas fa-seedling"></i>
+          <div class="food-details">
+            <div class="food-name">Quinoa</div>
+            <div class="food-calories">120 kcal / 4.4g proteína por 100g</div>
+          </div>
+        </div>
+        
+        <div class="food-item">
+          <i class="fas fa-cheese"></i>
+          <div class="food-details">
+            <div class="food-name">Requesón</div>
+            <div class="food-calories">98 kcal / 11g proteína por 100g</div>
+          </div>
+        </div>
+        
+        <div class="food-item">
+          <i class="fas fa-bread-slice"></i>
+          <div class="food-details">
+            <div class="food-name">Pan integral</div>
+            <div class="food-calories">247 kcal / 13g proteína por 100g</div>
+          </div>
+        </div>
+        
+        <div class="food-item">
+          <i class="fas fa-apple-alt"></i>
+          <div class="food-details">
+            <div class="food-name">Manzana</div>
+            <div class="food-calories">52 kcal / 0.3g proteína por 100g</div>
+          </div>
+        </div>
+        
+        <div class="food-item">
+          <i class="fas fa-leaf"></i>
+          <div class="food-details">
+            <div class="food-name">Espinaca</div>
+            <div class="food-calories">23 kcal / 2.9g proteína por 100g</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuración
+    const MET_VALUES = {
+      cardio: 6,
+      pesas: 4,
+      hiit: 8,
+      yoga: 3
+    };
+    
+    const OBJETIVO_FACTOR = {
+      perdida: 0.85,
+      mantenimiento: 1.0,
+      ganancia: 1.15
+    };
+    
+    const ACTIVITY_FACTORS = {
+      sedentario: 1.2,
+      ligero: 1.375,
+      moderado: 1.55,
+      activo: 1.725,
+      muyActivo: 1.9
+    };
+    
+    // Elementos del DOM
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const uploadContainer = document.getElementById('uploadContainer');
+    const fotoComida = document.getElementById('fotoComida');
+    const previewContainer = document.getElementById('previewContainer');
+    const previewImg = document.getElementById('preview');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const analysisResult = document.getElementById('analysisResult');
+    const analisisComida = document.getElementById('analisisComida');
+    const fitnessForm = document.getElementById('fitnessForm');
+    const resultado = document.getElementById('resultado');
+    const resultContent = document.getElementById('resultContent');
+    const calculateBtn = document.getElementById('calculateBtn');
+    
+    // Cambio de pestañas
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        
+        tab.classList.add('active');
+        document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+      });
+    });
+    
+    // Subida de imagen
+    uploadContainer.addEventListener('click', () => fotoComida.click());
+    
+    fotoComida.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewContainer.classList.remove('hidden');
+        analysisResult.classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    });
+    
+    // Arrastrar y soltar imagen
+    uploadContainer.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadContainer.style.borderColor = '#4361ee';
+      uploadContainer.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+    });
+    
+    uploadContainer.addEventListener('dragleave', () => {
+      uploadContainer.style.borderColor = '#ddd';
+      uploadContainer.style.backgroundColor = 'transparent';
+    });
+    
+    uploadContainer.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadContainer.style.borderColor = '#ddd';
+      uploadContainer.style.backgroundColor = 'transparent';
+      
+      if (e.dataTransfer.files.length) {
+        fotoComida.files = e.dataTransfer.files;
+        const event = new Event('change');
+        fotoComida.dispatchEvent(event);
+      }
+    });
+    
+    // Análisis de imagen (simulación de IA)
+    analyzeBtn.addEventListener('click', async function() {
+      if (!fotoComida.files[0]) return;
+      
+      // Mostrar estado de carga
+      analyzeBtn.innerHTML = '<i class="fas fa-spinner"></i> Analizando...';
+      analyzeBtn.disabled = true;
+      
+      // Simular tiempo de análisis
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Simulación de respuesta de IA basada en el nombre del archivo
+      const foodName = fotoComida.files[0].name.toLowerCase();
+      let analysisText = "";
+      let calories = 0;
+      let protein = 0;
+      let carbs = 0;
+      let fat = 0;
+      
+      if (foodName.includes("pollo") || foodName.includes("chicken")) {
+        analysisText = "He identificado pollo a la plancha con verduras.";
+        calories = 350;
+        protein = 45;
+        carbs = 10;
+        fat = 12;
+      } else if (foodName.includes("ensalada") || foodName.includes("salad")) {
+        analysisText = "He identificado una ensalada César con pollo.";
+        calories = 450;
+        protein = 30;
+        carbs = 20;
+        fat = 25;
+      } else if (foodName.includes("pasta") || foodName.includes("pasta")) {
+        analysisText = "He identificado pasta con salsa boloñesa.";
+        calories = 600;
+        protein = 25;
+        carbs = 80;
+        fat = 20;
+      } else if (foodName.includes("huevo") || foodName.includes("egg")) {
+        analysisText = "He identificado huevos revueltos con aguacate.";
+        calories = 320;
+        protein = 20;
+        carbs = 8;
+        fat = 24;
+      } else if (foodName.includes("pescado") || foodName.includes("fish")) {
+        analysisText = "He identificado salmón con brócoli y arroz.";
+        calories = 500;
+        protein = 35;
+        carbs = 40;
+        fat = 22;
+      } else {
+        analysisText = "He identificado una comida mixta con varios componentes.";
+        calories = 400;
+        protein = 25;
+        carbs = 35;
+        fat = 18;
+      }
+      
+      // Mostrar resultados
+      analisisComida.innerHTML = `
+        <p><strong>Descripción:</strong> ${analysisText}</p>
+        <p><strong>Valor nutricional estimado:</strong></p>
+        <ul>
+          <li><strong>Calorías:</strong> ${calories} kcal</li>
+          <li><strong>Proteínas:</strong> ${protein}g</li>
+          <li><strong>Carbohidratos:</strong> ${carbs}g</li>
+          <li><strong>Grasas:</strong> ${fat}g</li>
+        </ul>
+        <p><strong>Recomendación:</strong> ${getRecommendation(calories, protein)}</p>
+      `;
+      
+      analysisResult.classList.remove('hidden');
+      analyzeBtn.innerHTML = '<i class="fas fa-search"></i> Analizar Imagen';
+      analyzeBtn.disabled = false;
+    });
+    
+    function getRecommendation(calories, protein) {
+      if (protein > 30) {
+        return "Excelente fuente de proteínas, ideal para recuperación muscular post-entreno.";
+      } else if (calories > 500) {
+        return "Comida alta en calorías, considera reducir la porción si tu objetivo es pérdida de peso.";
+      } else {
+        return "Comida equilibrada, adecuada para una dieta saludable.";
+      }
+    }
+    
+    // Cálculo de fitness
+    fitnessForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      calculateBtn.innerHTML = '<i class="fas fa-spinner"></i> Calculando...';
+      calculateBtn.disabled = true;
+      
+      // Simular tiempo de cálculo
+      setTimeout(() => {
+        calculateResults();
+        calculateBtn.innerHTML = '<i class="fas fa-calculator"></i> Calcular Plan';
+        calculateBtn.disabled = false;
+      }, 1000);
+    });
+    
+    function calculateBMR(peso, altura, edad, sexo) {
+      if (sexo === 'hombre') {
+        return (10 * peso) + (6.25 * altura) - (5 * edad) + 5;
+      } else {
+        return (10 * peso) + (6.25 * altura) - (5 * edad) - 161;
+      }
+    }
+    
+    function calculateBMI(peso, altura) {
+      const alturaM = altura / 100;
+      const bmi = peso / (alturaM * alturaM);
+      
+      let category;
+      if (bmi < 18.5) category = "Bajo peso";
+      else if (bmi < 25) category = "Normal";
+      else if (bmi < 30) category = "Sobrepeso";
+      else category = "Obesidad";
+      
+      return {
+        value: bmi.toFixed(1),
+        category: category
+      };
+    }
+    
+    function calculateMacros(objetivo, caloriasTotales) {
+      let proteinas, grasas, carbohidratos;
+      
+      switch(objetivo) {
+        case 'perdida':
+          proteinas = 0.35;
+          grasas = 0.25;
+          carbohidratos = 0.40;
+          break;
+        case 'mantenimiento':
+          proteinas = 0.30;
+          grasas = 0.30;
+          carbohidratos = 0.40;
+          break;
+        case 'ganancia':
+          proteinas = 0.30;
+          grasas = 0.20;
+          carbohidratos = 0.50;
+          break;
+      }
+      
+      return {
+        proteinas: ((caloriasTotales * proteinas) / 4).toFixed(0),
+        grasas: ((caloriasTotales * grasas) / 9).toFixed(0),
+        carbohidratos: ((caloriasTotales * carbohidratos) / 4).toFixed(0)
+      };
+    }
+    
+    function calculateWater(peso) {
+      const baseWater = peso * 0.035;
+      return {
+        minimo: Math.round(baseWater),
+        optimo: Math.round(baseWater * 1.2)
+      };
+    }
+    
+    function renderMacroBars(proteinas, carbohidratos, grasas) {
+      const total = parseFloat(proteinas) + parseFloat(carbohidratos) + parseFloat(grasas);
+      return `
+        <div class="macro-bar">
+          <div class="macro-protein" style="width: ${(proteinas/total)*100}%"></div>
+          <div class="macro-carbs" style="width: ${(carbohidratos/total)*100}%"></div>
+          <div class="macro-fat" style="width: ${(grasas/total)*100}%"></div>
+        </div>
+        <div class="macro-legend">
+          <span><i class="fas fa-circle" style="color: #4cc9f0"></i> Proteínas: ${proteinas}g</span>
+          <span><i class="fas fa-circle" style="color: #4caf50"></i> Carbohidratos: ${carbohidratos}g</span>
+          <span><i class="fas fa-circle" style="color: #f44336"></i> Grasas: ${grasas}g</span>
+        </div>
+      `;
+    }
+    
+    function getGoalSpecificAdvice(objetivo) {
+      const advice = {
+        perdida: [
+          "Déficit calórico moderado (300-500 kcal/día)",
+          "Prioriza proteínas para preservar músculo",
+          "Cardio en estado estable combinado con HIIT",
+          "Entrenamiento de fuerza 3-4 veces/semana"
+        ],
+        mantenimiento: [
+          "Mantén balance energético",
+          "Varía tus entrenamientos para evitar estancamiento",
+          "Enfoque en progresión gradual en fuerza",
+          "Combina diferentes tipos de cardio"
+        ],
+        ganancia: [
+          "Superávit calórico moderado (200-300 kcal/día)",
+          "Asegura 1.6-2.2g de proteína/kg de peso",
+          "Enfoque en progresión de cargas",
+          "Descanso adecuado entre sesiones"
+        ]
+      };
+      
+      return `<ul>${advice[objetivo].map(item => `<li>${item}</li>`).join('')}</ul>`;
+    }
+    
+    function getStrengthExercises(focus) {
+      const exercises = {
+        superior: "Press banca, Press militar, Dominadas, Fondos, Curl de bíceps",
+        inferior: "Sentadillas, Peso muerto, Zancadas, Prensa de piernas, Elevación de talones",
+        fullbody: "Sentadillas, Peso muerto, Press banca, Remo con barra, Dominadas"
+      };
+      return exercises[focus] || exercises.fullbody;
+    }
+    
+    function getWorkoutPlan(nivel, objetivo, entrenamientos) {
+      const days = {
+        lunes: { type: 'fuerza', focus: objetivo === 'ganancia' ? 'superior' : 'fullbody' },
+        martes: { type: 'cardio', intensity: nivel === 'principiante' ? 'moderado' : 'alto' },
+        miercoles: { type: 'descanso activo' },
+        jueves: { type: 'fuerza', focus: objetivo === 'ganancia' ? 'inferior' : 'fullbody' },
+        viernes: { type: entrenamientos.includes('hiit') ? 'hiit' : 'cardio' },
+        sabado: { type: 'flexibilidad/movilidad' },
+        domingo: { type: 'descanso completo' }
+      };
+
+      let plan = '<div class="workout-plan-grid">';
+      
+      for (const [day, info] of Object.entries(days)) {
+        plan += `
+          <div class="workout-day">
+            <h4>${day.charAt(0).toUpperCase() + day.slice(1)}</h4>
+            <p><strong>Tipo:</strong> ${info.type}</p>
+            ${getDayDetails(info, nivel, objetivo)}
+          </div>
+        `;
+      }
+      
+      plan += '</div>';
+      return plan;
+    }
+    
+    function getDayDetails(info, nivel, objetivo) {
+      if (info.type === 'fuerza') {
+        const sets = nivel === 'principiante' ? 3 : nivel === 'intermedio' ? 4 : 5;
+        const reps = objetivo === 'ganancia' ? '6-8' : objetivo === 'perdida' ? '12-15' : '8-12';
+        
+        return `
+          <p><strong>Enfoque:</strong> ${info.focus}</p>
+          <p><strong>Series:</strong> ${sets} por ejercicio</p>
+          <p><strong>Repeticiones:</strong> ${reps}</p>
+          <p><strong>Ejercicios:</strong> ${getStrengthExercises(info.focus)}</p>
+        `;
+      } else if (info.type === 'cardio' || info.type === 'hiit') {
+        const duration = nivel === 'principiante' ? '20-30 min' : nivel === 'intermedio' ? '30-40 min' : '40-50 min';
+        return `
+          <p><strong>Intensidad:</strong> ${info.intensity || 'alta'}</p>
+          <p><strong>Duración:</strong> ${duration}</p>
+          ${info.type === 'hiit' ? '<p><strong>Estructura:</strong> 30s trabajo / 30s descanso</p>' : ''}
+        `;
+      } else if (info.type === 'flexibilidad/movilidad') {
+        return `
+          <p><strong>Actividades:</strong> Yoga, estiramientos dinámicos, movilidad articular</p>
+          <p><strong>Duración:</strong> ${nivel === 'principiante' ? '20-30 min' : '30-45 min'}</p>
+        `;
+      } else {
+        return `
+          <p><strong>Recomendación:</strong> Caminata ligera, natación suave o descanso completo</p>
+        `;
+      }
+    }
+    
+    function renderBMIScale(bmiValue) {
+      const positions = {
+        bajoPeso: 12.5,
+        normal: 37.5,
+        sobrepeso: 62.5,
+        obesidad: 87.5
+      };
+      
+      let markerPos = 0;
+      if (bmiValue < 18.5) markerPos = (bmiValue / 18.5) * positions.bajoPeso;
+      //else if 
+            else if (bmiValue < 25) markerPos = positions.bajoPeso + ((bmiValue - 18.5) / (25 - 18.5)) * (positions.normal - positions.bajoPeso);
+      else if (bmiValue < 30) markerPos = positions.normal + ((bmiValue - 25) / (30 - 25)) * (positions.sobrepeso - positions.normal);
+      else markerPos = positions.sobrepeso + ((Math.min(bmiValue, 40) - 30) / (40 - 30)) * (positions.obesidad - positions.sobrepeso);
+      
+      return `
+        <div class="bmi-indicator">
+          <span>BMI: ${bmiValue}</span>
+          <div class="bmi-scale">
+            <div class="bmi-marker" style="left: ${markerPos}%"></div>
+          </div>
+          <div class="bmi-labels">
+            <span>Bajo peso</span>
+            <span>Normal</span>
+            <span>Sobrepeso</span>
+            <span>Obesidad</span>
+          </div>
+        </div>
+      `;
+    }
+    
+    function calculateResults() {
+      const peso = parseFloat(document.getElementById('peso').value);
+      const altura = parseFloat(document.getElementById('altura').value);
+      const edad = parseFloat(document.getElementById('edad').value);
+      const sexo = document.getElementById('sexo').value;
+      const objetivo = document.getElementById('objetivo').value;
+      const actividad = document.getElementById('actividad').value;
+      const duracion = parseFloat(document.getElementById('duracion').value);
+      const entrenamientos = Array.from(document.getElementById('entrenamientos').selectedOptions).map(opt => opt.value);
+      const nivel = document.getElementById('nivel').value;
+      
+      // Cálculos principales
+      const TMB = calculateBMR(peso, altura, edad, sexo);
+      const bmi = calculateBMI(peso, altura);
+      const caloriasTotales = TMB * ACTIVITY_FACTORS[actividad] * OBJETIVO_FACTOR[objetivo];
+      const macros = calculateMacros(objetivo, caloriasTotales);
+      const agua = calculateWater(peso);
+      
+      // Cálculo de calorías quemadas en entrenamiento
+      const tiempoPorEjercicio = duracion / entrenamientos.length;
+      let totalCaloriasQuemadas = 0;
+      let detalles = '';
+      
+      entrenamientos.forEach(tipo => {
+        const met = MET_VALUES[tipo];
+        const calorias = (met * 3.5 * peso / 200) * tiempoPorEjercicio;
+        totalCaloriasQuemadas += calorias;
+        detalles += `<li>${tipo.toUpperCase()}: ${calorias.toFixed(0)} kcal (${getWorkoutIntensity(tipo, nivel)})</li>`;
+      });
+      
+      // Recomendación de proteínas
+      const proteinaMin = (1.6 * peso).toFixed(1);
+      const proteinaMax = (2.2 * peso).toFixed(1);
+      const wheyMin = Math.ceil(proteinaMin / 25);
+      const wheyMax = Math.ceil(proteinaMax / 25);
+      
+      // Mostrar resultados
+      resultContent.innerHTML = `
+        <div class="result-item">
+          <h3><i class="fas fa-fire"></i> Metabolismo Basal</h3>
+          <p><strong>TMB (Mifflin-St Jeor):</strong> ${TMB.toFixed(0)} kcal/día</p>
+        </div>
+        
+        <div class="result-item">
+          <h3><i class="fas fa-weight"></i> Índice de Masa Corporal</h3>
+          ${renderBMIScale(bmi.value)}
+          <p><strong>Valor:</strong> ${bmi.value} (${bmi.category})</p>
+        </div>
+        
+        <div class="result-item">
+          <h3><i class="fas fa-bolt"></i> Requerimiento Calórico</h3>
+          <p><strong>Objetivo:</strong> ${getObjetivoText(objetivo)}</p>
+          <p><strong>Nivel de actividad:</strong> ${actividad.charAt(0).toUpperCase() + actividad.slice(1)}</p>
+          <p><strong>Calorías diarias recomendadas:</strong> ${caloriasTotales.toFixed(0)} kcal/día</p>
+        </div>
+        
+        <div class="result-item">
+          <h3><i class="fas fa-utensils"></i> Macronutrientes</h3>
+          ${renderMacroBars(macros.proteinas, macros.carbohidratos, macros.grasas)}
+        </div>
+        
+        <div class="result-item">
+          <h3><i class="fas fa-running"></i> Entrenamiento</h3>
+          <p><strong>Calorías quemadas estimadas:</strong> ${totalCaloriasQuemadas.toFixed(0)} kcal</p>
+          <p><strong>Desglose por ejercicio:</strong></p>
+          <ul>${detalles}</ul>
+        </div>
+        
+        <div class="result-item">
+          <h3><i class="fas fa-dna"></i> Proteínas</h3>
+          <p><strong>Rango diario recomendado:</strong> ${proteinaMin}g - ${proteinaMax}g</p>
+          <p><strong>Suplemento de proteína (whey):</strong> ${wheyMin} - ${wheyMax} medidas diarias (25g por medida)</p>
+        </div>
+        
+        <div class="result-item">
+          <h3><i class="fas fa-tint"></i> Hidratación</h3>
+          <p><strong>Agua mínima recomendada:</strong> ${agua.minimo}L/día</p>
+          <p><strong>Agua óptima (con ejercicio):</strong> ${agua.optimo}L/día</p>
+        </div>
+        
+        <div class="result-item">
+          <h3><i class="fas fa-calendar-alt"></i> Plan Semanal Recomendado</h3>
+          ${getWorkoutPlan(nivel, objetivo, entrenamientos)}
+        </div>
+        
+        <div class="result-item">
+          <h3><i class="fas fa-lightbulb"></i> Recomendaciones Específicas</h3>
+          ${getGoalSpecificAdvice(objetivo)}
+        </div>
+      `;
+      
+      resultado.classList.remove('hidden');
+    }
+    
+    function getObjetivoText(objetivo) {
+      switch(objetivo) {
+        case 'perdida': return 'Pérdida de grasa (déficit calórico)';
+        case 'mantenimiento': return 'Mantenimiento de peso';
+        case 'ganancia': return 'Ganancia muscular (superávit calórico)';
+        default: return '';
+      }
+    }
+    
+    function getWorkoutIntensity(tipo, nivel) {
+      if (nivel === 'principiante') {
+        return 'Intensidad moderada';
+      } else if (nivel === 'intermedio') {
+        return tipo === 'hiit' ? 'Alta intensidad' : 'Intensidad media-alta';
+      } else {
+        return tipo === 'yoga' ? 'Intensidad media' : 'Alta intensidad';
+      }
+    }
+  </script>
+</body>
+</html>
